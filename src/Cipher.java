@@ -38,18 +38,40 @@ public class Cipher extends JFrame implements ActionListener {
     }
     
     public char[] criptAlphabet (String keyword){
-        //Takes in keyword and scrambles alphabet based on it
+        //Takes in keyword and scrambles and returns the alphabet based on that word
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        keyword = format(keyword);
         char[] criptAlphabet = keyword.toCharArray();
         //Keep removing char in keyword from alphabet
-        for(int i =0; i<alphabet.length; i++){
-            for(int j = 0; j<criptAlphabet.length; j++){
+        for(int j = 0; j<criptAlphabet.length; j++){
+            for(int i =0; i<alphabet.length; i++){
                 if(alphabet[i]==criptAlphabet[j]){
                     alphabet = removeElement(alphabet, alphabet[i]);
                 }
             }
         }
         return(combine(criptAlphabet, alphabet));
+    }
+    
+    public String format(String word){
+        //convert string to char[] array
+        char[] array = word.toCharArray();
+        //remove capitol letters
+        for(int i=0; i<array.length; i++){
+            array[i]=java.lang.Character.toLowerCase(array[i]);
+        }
+        //remove repeated characters
+        for(int i=0; i<array.length; i++){
+            for(int j=i+1; j<array.length;j++){
+                if(array[i]==array[j]){
+//                    System.out.println("removed "+array[j]);
+                    array = removeElement(array, array[j]);
+                }
+            }
+        }
+        //Convert array back to string
+        System.out.println(new String(array));
+        return new String(array);
     }
     
     public char[] removeElement (char[] array, char removeMe){
@@ -62,8 +84,8 @@ public class Cipher extends JFrame implements ActionListener {
         }
         //create two new arrays excluding the value to be removed
         char[] newArray1 = Arrays.copyOfRange(array, 0, breakPoint);
-        char[] newArray2 = Arrays.copyOfRange(array, breakPoint, array.length);
-        //merge and return two arrays
+        char[] newArray2 = Arrays.copyOfRange(array, breakPoint+1, array.length);
+        //return combination of those two arrays
         return(combine(newArray1, newArray2));
     }
     
@@ -78,6 +100,7 @@ public class Cipher extends JFrame implements ActionListener {
     }
     
     public static char[] combine(char[] a, char[] b){
+        //Combines two char arrays and returns the resulting char array
         int length = a.length + b.length;
         char[] result = new char[length];
         System.arraycopy(a, 0, result, 0, a.length);
@@ -86,7 +109,7 @@ public class Cipher extends JFrame implements ActionListener {
     }
     
     public void InitializeComponenets(){
-        
+        //Set up the JFrame 
         encript.addActionListener(this);
         decript.addActionListener(this);
         
@@ -114,11 +137,11 @@ public class Cipher extends JFrame implements ActionListener {
         window.setVisible(true);
     }
 
-    @Override //Deals with button presses
+    @Override 
     public void actionPerformed(ActionEvent e) {
-        
+        //Deals with button presses
         if(e.getSource()==encript){
-            //Take keyword and text from inputMessage, encript, and output encripted text through outputMessage
+            //Take keyword and text from inputMessage, encript, and output encripted text through outputMessage                           fix not denying keyword "Keyword"
             if(!keywordField.getText().equals("keyword") && keywordField.getText().length()>4){
                 keyword = keywordField.getText();
                 input = keywordField.getText();
