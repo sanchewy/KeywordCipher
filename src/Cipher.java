@@ -37,6 +37,35 @@ public class Cipher extends JFrame implements ActionListener {
        
     }
     
+    public void decript(String keyword, String input){
+        //Create cript alphabet
+        char[] criptAlphabet = criptAlphabet(keyword);
+        char[] regularAlphabet = "abcdeghijklmnopqrstuvwxyz".toCharArray();
+        //Break input string into array
+        char[] in = input.toCharArray();
+        lowerCase(in);
+        //replace letters with like position letters in regular alphabet
+        for(int i = 0; i<in.length; i++){
+            //get the position of each character from "in" in cipher alphabet, then replace with same position leter in regular alphabet
+            //Check if char == " "
+            if(!isSpace(in, i)){
+                // if not space, swap with other alphabet
+                int pos = getPosition(in[i], criptAlphabet);
+                if(pos!=-1){
+                    in[i]=regularAlphabet[pos];
+                }
+            }
+            else{
+                //do nothing (leave as a space "  "
+            }
+         }
+        //Recreate string from array
+        String out = new String(in);
+        //return string new message
+        outputMessage.setText(out);
+        window.repaint();
+    }
+    
     public char[] criptAlphabet (String keyword){
         //Takes in keyword and scrambles and returns the alphabet based on that word
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
@@ -74,7 +103,6 @@ public class Cipher extends JFrame implements ActionListener {
         return new String(array);
     }
     
-   
     public char[] lowerCase(char[] array){
         for(int i=0; i<array.length; i++){
             array[i]=java.lang.Character.toLowerCase(array[i]);
@@ -97,10 +125,10 @@ public class Cipher extends JFrame implements ActionListener {
         return(combine(newArray1, newArray2));
     }
     
-    public String encrypt(String keyword, String input){
+    public void encript(String keyword, String input){
         //Create cript alphabet
-        char[] alphabet = criptAlphabet(keyword);
-        System.out.println(alphabet);
+        char[] criptAlphabet = criptAlphabet(keyword);
+        char[] regularAlphabet = "abcdeghijklmnopqrstuvwxyz".toCharArray();
         //Break input string into array
         char[] in = input.toCharArray();
         lowerCase(in);
@@ -110,9 +138,9 @@ public class Cipher extends JFrame implements ActionListener {
             //Check if char == " "
             if(!isSpace(in, i)){
                 // if not space, swap with other alphabet
-                int pos = getPosition(in[i]);
+                int pos = getPosition(in[i],regularAlphabet);
                 if(pos!=-1){
-                    in[i]=alphabet[pos];
+                    in[i]=criptAlphabet[pos];
                 }
             }
             else{
@@ -120,11 +148,11 @@ public class Cipher extends JFrame implements ActionListener {
             }
          }
         //Recreate string from array
-        String out = in.toString();
+        String out = new String(in);
         //return string new message
-        System.out.println(input);
-        System.out.println(in);
-        return out;
+        outputMessage.removeAll();
+        outputMessage.setText(out);
+        window.repaint();
     }
     
     public static final boolean isSpace( char[] charArray, int index ){
@@ -139,9 +167,7 @@ public class Cipher extends JFrame implements ActionListener {
       }
   }
     
-    public int getPosition(char letter){
-        String alpha = "abcdefghijklmnopqrstuvwxyz";
-        char[] alphabet = alpha.toCharArray();
+    public int getPosition(char letter, char[] alphabet){
         for(int i =0; i<alphabet.length; i++){
             if(alphabet[i]==letter){
                 return i;
@@ -170,6 +196,7 @@ public class Cipher extends JFrame implements ActionListener {
         inputMessage.setLineWrap(true);
         
         outputMessage.setText("Output Message");
+        outputMessage.setEditable(false);
         
         buttonPanel.add(encript);
         buttonPanel.add(decript);
@@ -193,11 +220,11 @@ public class Cipher extends JFrame implements ActionListener {
         //Deals with button presses
         if(e.getSource()==encript){
             //Take keyword and text from inputMessage, encript, and output encripted text through outputMessage
+            //Check for poor keyword input
             if(!keywordField.getText().equals("Keyword") && keywordField.getText().length()>4 && !keywordField.getText().equals("Please enter a longer keyword")){
-                    
                 keyword = keywordField.getText();
                 input = inputMessage.getText();
-                encrypt(keyword, input);
+                encript(keyword, input);
             }
             else{
                 keywordField.setText("Please enter a longer keyword");
@@ -205,7 +232,15 @@ public class Cipher extends JFrame implements ActionListener {
         }
         else if(e.getSource()==decript){
             //Take keyword and encripted text from inputMessage, decript, and output encripted text through outputMessage
-            outputMessage.setText("Working on it!");
+            //Check for poor keyword input
+             if(!keywordField.getText().equals("Keyword") && keywordField.getText().length()>4 && !keywordField.getText().equals("Please enter a longer keyword")){
+                 keyword = keywordField.getText();
+                 input = inputMessage.getText();
+                 decript(keyword, input);
+            }
+            else{
+                keywordField.setText("Please enter a longer keyword");
+            }
         }
         else{
             throw new UnsupportedOperationException("This button is not supported yet."); //To change body of generated methods, choose Tools | Templates.
