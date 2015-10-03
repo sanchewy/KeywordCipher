@@ -92,11 +92,53 @@ public class Cipher extends JFrame implements ActionListener {
     public String encrypt(String keyword, String input){
         //Create cript alphabet
         char[] alphabet = criptAlphabet(keyword);
-        //replace letters with like position letters in cript alphabet
         System.out.println(alphabet);
+        //Break input string into array
+        char[] in = input.toCharArray();
+        //replace letters with like position letters in cript alphabet
+        for(int i = 0; i<in.length; i++){
+            //get the position of each character from "in" in regular alphabet, then replace with same position leter in cipher alphabet
+            //Check if char == " "
+            if(!isSpace(in, i)){
+                // if not space, swap with other alphabet
+                int pos = getPosition(in[i]);
+                if(pos!=-1){
+                    in[i]=alphabet[pos];
+                }
+            }
+            else{
+                //do nothing (leave as a space "  "
+            }
+         }
+        //Recreate string from array
+        String out = in.toString();
         //return string new message
-        String you=null;
-        return(you);
+        System.out.println(input);
+        System.out.println(in);
+        return out;
+    }
+    
+    public static final boolean isSpace( char[] charArray, int index ){
+        
+      if ( ( charArray == null ) || ( charArray.length == 0 ) || ( index < 0 ) || ( index >= charArray.length ) )
+      {
+          return false;
+      }
+      else
+      {
+          return ( Character.isWhitespace( charArray[ index ] ) ? true : false );
+      }
+  }
+    
+    public int getPosition(char letter){
+        String alpha = "abcdefghijklmnopqrstuvwxyz";
+        char[] alphabet = alpha.toCharArray();
+        for(int i =0; i<alphabet.length; i++){
+            if(alphabet[i]==letter){
+                return i;
+            }
+        }
+        return -1;
     }
     
     public static char[] combine(char[] a, char[] b){
@@ -113,9 +155,9 @@ public class Cipher extends JFrame implements ActionListener {
         encript.addActionListener(this);
         decript.addActionListener(this);
         
-        keywordField.setText("Keyword");
+        keywordField.setText("moonbeam");
         
-        inputMessage.setText("Input Message");
+        inputMessage.setText("this afternoon i ate pie");
         inputMessage.setLineWrap(true);
         
         outputMessage.setText("Output Message");
@@ -141,10 +183,10 @@ public class Cipher extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         //Deals with button presses
         if(e.getSource()==encript){
-            //Take keyword and text from inputMessage, encript, and output encripted text through outputMessage                           fix not denying keyword "Keyword"
-            if(!keywordField.getText().equals("keyword") && keywordField.getText().length()>4){
+            //Take keyword and text from inputMessage, encript, and output encripted text through outputMessage
+            if(!keywordField.getText().equals("Keyword") && keywordField.getText().length()>4){
                 keyword = keywordField.getText();
-                input = keywordField.getText();
+                input = inputMessage.getText();
                 encrypt(keyword, input);
             }
             else{
