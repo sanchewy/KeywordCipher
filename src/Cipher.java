@@ -74,6 +74,14 @@ public class Cipher extends JFrame implements ActionListener {
         return new String(array);
     }
     
+   
+    public char[] lowerCase(char[] array){
+        for(int i=0; i<array.length; i++){
+            array[i]=java.lang.Character.toLowerCase(array[i]);
+        }
+        return array;
+    }
+    
     public char[] removeElement (char[] array, char removeMe){
         int breakPoint=0;
         //find value to be removed
@@ -95,6 +103,7 @@ public class Cipher extends JFrame implements ActionListener {
         System.out.println(alphabet);
         //Break input string into array
         char[] in = input.toCharArray();
+        lowerCase(in);
         //replace letters with like position letters in cript alphabet
         for(int i = 0; i<in.length; i++){
             //get the position of each character from "in" in regular alphabet, then replace with same position leter in cipher alphabet
@@ -155,9 +164,9 @@ public class Cipher extends JFrame implements ActionListener {
         encript.addActionListener(this);
         decript.addActionListener(this);
         
-        keywordField.setText("moonbeam");
+        keywordField.setText("Keyword");
         
-        inputMessage.setText("this afternoon i ate pie");
+        inputMessage.setText("Input Message");
         inputMessage.setLineWrap(true);
         
         outputMessage.setText("Output Message");
@@ -184,7 +193,8 @@ public class Cipher extends JFrame implements ActionListener {
         //Deals with button presses
         if(e.getSource()==encript){
             //Take keyword and text from inputMessage, encript, and output encripted text through outputMessage
-            if(!keywordField.getText().equals("Keyword") && keywordField.getText().length()>4){
+            if(!keywordField.getText().equals("Keyword") && keywordField.getText().length()>4 && !keywordField.getText().equals("Please enter a longer keyword")){
+                    
                 keyword = keywordField.getText();
                 input = inputMessage.getText();
                 encrypt(keyword, input);
