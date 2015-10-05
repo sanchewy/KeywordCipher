@@ -15,5 +15,6 @@ public class MainClass {
     public static void main(String[] args){
         Cipher cipher = new Cipher();
         cipher.InitializeComponenets();
+        System.out.println(cipher.format("september keinan"));
     }
 }

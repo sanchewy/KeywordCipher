@@ -7,7 +7,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import static java.lang.Math.E;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import javax.swing.border.*;
 
 /**
@@ -34,13 +39,13 @@ public class Cipher extends JFrame implements ActionListener {
     String input;
     
     public Cipher(){
-       
+       //Empty constructor
     }
     
     public void decript(String keyword, String input){
         //Create cript alphabet
         char[] criptAlphabet = criptAlphabet(keyword);
-        char[] regularAlphabet = "abcdeghijklmnopqrstuvwxyz".toCharArray();
+        char[] regularAlphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
         //Break input string into array
         char[] in = input.toCharArray();
         lowerCase(in);
@@ -75,32 +80,40 @@ public class Cipher extends JFrame implements ActionListener {
         for(int j = 0; j<criptAlphabet.length; j++){
             for(int i =0; i<alphabet.length; i++){
                 if(alphabet[i]==criptAlphabet[j]){
-                    alphabet = removeElement(alphabet, alphabet[i]);
+                    alphabet = removeElement(alphabet, i);
                 }
             }
         }
         return(combine(criptAlphabet, alphabet));
     }
     
-    public String format(String word){
+    public String format(String word){        
         //convert string to char[] array
         char[] array = word.toCharArray();
         //remove capitol letters
         for(int i=0; i<array.length; i++){
+            if(array[i]==' '){
+                array=removeElement(array, i);
+            }
             array[i]=java.lang.Character.toLowerCase(array[i]);
         }
         //remove repeated characters
         for(int i=0; i<array.length; i++){
-            for(int j=i+1; j<array.length;j++){
-                if(array[i]==array[j]){
-//                    System.out.println("removed "+array[j]);
-                    array = removeElement(array, array[j]);
-                }
+            while(find(array, array[i], i+1)!=-1){
+                array = removeElement(array, find(array, array[i], i+1));
             }
         }
         //Convert array back to string
-        System.out.println(new String(array));
         return new String(array);
+    }
+    
+    public int find(char[] inputArray, char findMe, int beginRange){
+        for(int i = beginRange; i<inputArray.length; i++){
+            if (inputArray[i]==findMe){
+                return i;
+            }
+        }
+        return -1;
     }
     
     public char[] lowerCase(char[] array){
@@ -110,25 +123,18 @@ public class Cipher extends JFrame implements ActionListener {
         return array;
     }
     
-    public char[] removeElement (char[] array, char removeMe){
-        int breakPoint=0;
-        //find value to be removed
-        for(int i = 0; i<array.length; i++){
-            if(array[i]==removeMe){
-                breakPoint = i;
-            }
-        }
+    public char[] removeElement (char[] array, int breakPoint){
         //create two new arrays excluding the value to be removed
         char[] newArray1 = Arrays.copyOfRange(array, 0, breakPoint);
         char[] newArray2 = Arrays.copyOfRange(array, breakPoint+1, array.length);
         //return combination of those two arrays
         return(combine(newArray1, newArray2));
-    }
+    } 
     
     public void encript(String keyword, String input){
         //Create cript alphabet
         char[] criptAlphabet = criptAlphabet(keyword);
-        char[] regularAlphabet = "abcdeghijklmnopqrstuvwxyz".toCharArray();
+        char[] regularAlphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
         //Break input string into array
         char[] in = input.toCharArray();
         lowerCase(in);
