@@ -17,3 +17,4 @@ encrypted messages. It will also have encrypt and decrypt functions (and buttons
 need the keyword used in the encryption process. 
 
 ***As an afterthought, I added a feature allowing you to shift the keyword alphabet over a specified amount after creating it. Essentially, this is like preforming a Caesar cipher after preforming a keyword cipher.***
+  -This version may be less stable, as we did not test it as much. If you find a werid bug, please try an older version
