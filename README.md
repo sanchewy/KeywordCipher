@@ -15,3 +15,5 @@ Message: Attack at dawn Encoded message: mqqmsf mq tmvj
 The program will include a GUI with text fields for inputting the keyword and for adding or copying messages and 
 encrypted messages. It will also have encrypt and decrypt functions (and buttons on the interface). To decrypt you will 
 need the keyword used in the encryption process. 
+
+***As an afterthought, I added a feature allowing you to shift the keyword alphabet over a specified amount after creating it. Essentially, this is like preforming a Caesar cipher after preforming a keyword cipher.***
