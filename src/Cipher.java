@@ -25,6 +25,7 @@ public class Cipher extends JFrame implements ActionListener {
     //Components
     JFrame window = new JFrame("Keyword Cipher");
     JTextField keywordField = new JTextField(20);
+    JTextField offSet = new JTextField(10);
     JTextArea inputMessage = new JTextArea();
     JTextArea outputMessage = new JTextArea();
     JScrollPane inPane = new JScrollPane(inputMessage);
@@ -42,9 +43,9 @@ public class Cipher extends JFrame implements ActionListener {
        //Empty constructor
     }
     
-    public void decript(String keyword, String input){
+    public void decript(String keyword, String input, int AdjustValue){
         //Create cript alphabet
-        char[] criptAlphabet = criptAlphabet(keyword);
+        char[] criptAlphabet = criptAlphabet(keyword, AdjustValue);
         char[] regularAlphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
         //Break input string into array
         char[] in = input.toCharArray();
@@ -71,7 +72,7 @@ public class Cipher extends JFrame implements ActionListener {
         window.repaint();
     }
     
-    public char[] criptAlphabet (String keyword){
+    public char[] criptAlphabet (String keyword, int adjustValue){
         //Takes in keyword and scrambles and returns the alphabet based on that word
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
         keyword = format(keyword);
@@ -84,7 +85,25 @@ public class Cipher extends JFrame implements ActionListener {
                 }
             }
         }
-        return(combine(criptAlphabet, alphabet));
+        //Move alphabet over to compensate for adjust value
+        char[] sudoBet=combine(criptAlphabet, alphabet);
+        System.out.println(sudoBet);
+        sudoBet=OffSetAdjust(sudoBet, adjustValue);
+        return(sudoBet);
+    }
+    
+    public char[] OffSetAdjust(char[] alphabet, int adjustValue){
+        if(adjustValue==0){
+            return alphabet;
+        }
+        char[] array = new char[alphabet.length];
+        array[0]=alphabet[alphabet.length-1];
+        for(int j =1; j< alphabet.length; j++){
+            array[j]=alphabet[j-1];
+        }
+        System.out.println(array);
+        array=OffSetAdjust(array, adjustValue-1);
+        return array;
     }
     
     public String format(String word){        
@@ -131,9 +150,9 @@ public class Cipher extends JFrame implements ActionListener {
         return(combine(newArray1, newArray2));
     } 
     
-    public void encript(String keyword, String input){
+    public void encript(String keyword, String input, int adjustValue){
         //Create cript alphabet
-        char[] criptAlphabet = criptAlphabet(keyword);
+        char[] criptAlphabet = criptAlphabet(keyword, adjustValue);
         char[] regularAlphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
         //Break input string into array
         char[] in = input.toCharArray();
@@ -152,7 +171,7 @@ public class Cipher extends JFrame implements ActionListener {
             else{
                 //do nothing (leave as a space "  "
             }
-         }
+        }
         //Recreate string from array
         String out = new String(in);
         //return string new message
@@ -198,6 +217,8 @@ public class Cipher extends JFrame implements ActionListener {
         
         keywordField.setText("Keyword");
         
+        offSet.setText("Offset #");
+        
         inputMessage.setText("Input Message");
         inputMessage.setLineWrap(true);
         
@@ -208,6 +229,7 @@ public class Cipher extends JFrame implements ActionListener {
         buttonPanel.add(decript);
         
         ioPanel.add(keywordField);
+        ioPanel.add(offSet);
         ioPanel.setBorder(new TitledBorder("Pick a strong keyword!"));
         
         window.setLayout(new GridLayout(4,1,0,10));
@@ -230,7 +252,12 @@ public class Cipher extends JFrame implements ActionListener {
             if(!keywordField.getText().equals("Keyword") && keywordField.getText().length()>4 && !keywordField.getText().equals("Please enter a longer keyword")){
                 keyword = keywordField.getText();
                 input = inputMessage.getText();
-                encript(keyword, input);
+                try{
+                    encript(keyword, input, Integer.parseInt(offSet.getText()));
+                }
+                catch(NumberFormatException d){
+                    encript(keyword, input, 0);
+                }
             }
             else{
                 keywordField.setText("Please enter a longer keyword");
@@ -242,7 +269,12 @@ public class Cipher extends JFrame implements ActionListener {
              if(!keywordField.getText().equals("Keyword") && keywordField.getText().length()>4 && !keywordField.getText().equals("Please enter a longer keyword")){
                  keyword = keywordField.getText();
                  input = inputMessage.getText();
-                 decript(keyword, input);
+                try{
+                    decript(keyword, input, Integer.parseInt(offSet.getText()));
+                }
+                catch(NumberFormatException d){
+                    decript(keyword, input, 0);
+                }
             }
             else{
                 keywordField.setText("Please enter a longer keyword");
