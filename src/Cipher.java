@@ -234,7 +234,7 @@ public class Cipher extends JFrame implements ActionListener {
         
         window.setLayout(new GridLayout(4,1,0,10));
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(400,350);
+        window.setSize(500,350);
         window.setLocationRelativeTo(null);
         window.add(ioPanel);
         window.add(inPane);
